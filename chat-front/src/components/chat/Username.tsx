@@ -1,25 +1,22 @@
-"use client";
 import { useState } from "react";
 import { Socket } from "socket.io-client";
 
 interface Props {
   socket: Socket;
-  username: string;
+  setUsername: (username: string) => void;
 }
 
-const SendMessage = ({ socket, username }: Props) => {
+const Username = ({ socket, setUsername }: Props) => {
   const [text, setText] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    socket.emit("chat-message", {
-      username,
-      content: text,
-      timeSent: new Date().toISOString(),
+    setUsername(text);
+    socket.emit("username-set", {
+      username: text,
     });
-
-    setText("");
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <input
@@ -32,4 +29,4 @@ const SendMessage = ({ socket, username }: Props) => {
   );
 };
 
-export default SendMessage;
+export default Username;
